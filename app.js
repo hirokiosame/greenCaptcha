@@ -52,6 +52,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 
 app.get('/greencaptcha.js', function(req, res){
+	res.header("Content-Type", "text/javascript");
 	var ip = req.header('x-forwarded-for') || req.ip;
 		ip = "128.197.230.201";
 
