@@ -29,7 +29,7 @@ draw.drawSentence = function (sentence) {
 		i++;
 	}
 
-	ctx.rotate(.1);
+	ctx.rotate(0.2);
 
 	return canvas.toDataURL(); // returns base64 img png
 }

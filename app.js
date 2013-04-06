@@ -144,13 +144,13 @@ function deg2rad(deg) {
 var draw = {};
 draw.drawSentence = function (sentence) {
 	
-	var canvas = new Canvas(300,200),
+	var canvas = new Canvas(300,80),
 	tokens = sentence.split(' '),
 	w1 = Math.floor(Math.random()*tokens.length),
 	w2 = Math.floor(Math.random()*tokens.length),
 	ctx = canvas.getContext('2d');
 	
-	ctx.font = '12px Impact';
+	ctx.font = '12px Times';
 	ctx.beginning = 20;
 	ctx.fontSize = 12;
 	ctx.width = canvas.width;
@@ -170,7 +170,7 @@ draw.drawSentence = function (sentence) {
 		i++;
 	}
 
-	ctx.rotate(.1);
+	ctx.rotate(0.2);
 
 	return canvas.toDataURL(); // returns base64 img png
 }
@@ -197,12 +197,12 @@ draw.drawWord = function (word,x,y,distortC,ctx) {
 draw.distort = function(x,y,width,ctx) {
 
 	// Add random lines
-	for (var i = 0, lim =  Math.floor(Math.random() * 15 + 1); i < lim; i++) {
+	for (var i = 0, lim =  Math.floor(Math.random() * 5 + 3); i < lim; i++) {
 		ctx.strokeStyle = 'rgba(' + this.rndC() + ',' + this.rndC() + ',' + this.rndC() + ',0.7)';
 		ctx.lineWidth = Math.floor(Math.random() * 2 + 1);
 		ctx.beginPath();
-		ctx.lineTo(x + Math.floor(Math.random() * width), y + Math.floor(Math.random() * ctx.fontSize) - 5);
-		ctx.lineTo(x + Math.floor(Math.random() * width), y + Math.floor(Math.random() * ctx.fontSize) - 5);
+		ctx.lineTo(x + Math.floor(Math.random() * width), y + Math.floor(Math.random() * ctx.fontSize) - 10);
+		ctx.lineTo(x + Math.floor(Math.random() * width), y + Math.floor(Math.random() * ctx.fontSize) - 10);
 		ctx.stroke();
 	}
 
