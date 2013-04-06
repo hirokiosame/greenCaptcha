@@ -58,7 +58,7 @@ metricTons	gasName	state	year
 41215.55	Sulfur Hexafluoride	OR	2011
 12206.56	Nitrous Oxide	VI	2010
 1147767.37	PFCs	KY	2011
-3856.2	Fluorinated GHG Production (CO<sub>2</sub>e)	TX	2011
+3856.2	Fluorinated GHG Production (CO2)	TX	2011
 9309.625	HFCs	VA	2011
 1789.065	HFCs	ME	2011
 69828.63	Sulfur Hexafluoride	MO	2011
@@ -70,7 +70,7 @@ metricTons	gasName	state	year
 18775.84	Sulfur Hexafluoride	IA	2011
 16.38	HFCs	WV	2010
 212190.28	PFCs	VT	2011
-138696.78	Fluorinated GHG Production (CO<sub>2</sub>e)	NJ	2011
+138696.78	Fluorinated GHG Production (CO2)	NJ	2011
 56382.49	Sulfur Hexafluoride	DE	2011
 65531.41	Sulfur Hexafluoride	KS	2011
 98930.96	Nitrogen Triflouride	VA	2011
@@ -127,7 +127,7 @@ metricTons	gasName	state	year
 6797.44	Nitrogen Triflouride	NY	2011
 2323.76	Nitrous Oxide	GU	2010
 60333	Biogenic CO2	DE	2011
-82332.588	Fluorinated GHG Production (CO<sub>2</sub>e)	NC	2011
+82332.588	Fluorinated GHG Production (CO2)	NC	2011
 303120	PFCs	OH	2010
 6087.33	Sulfur Hexafluoride	NE	2011
 428286.7	Biogenic CO2	VT	2010
@@ -240,7 +240,7 @@ metricTons	gasName	state	year
 717323.26	Nitrous Oxide	AL	2010
 3370340.4	Biogenic CO2	PA	2010
 36868.3	Nitrous Oxide	HI	2010
-816002.27	Fluorinated GHG Production (CO<sub>2</sub>e)	LA	2011
+816002.27	Fluorinated GHG Production (CO2)	LA	2011
 1854955.4	Biogenic CO2	MA	2010
 83595.08	PFCs	VA	2011
 5244161.7	Biogenic CO2	MS	2011
@@ -267,13 +267,13 @@ metricTons	gasName	state	year
 66852.8	Biogenic CO2	UT	2010
 47870.44	PFCs	MA	2011
 88810.8	Biogenic CO2	MO	2010
-287624.8	Fluorinated GHG Production (CO<sub>2</sub>e)	PA	2011
+287624.8	Fluorinated GHG Production (CO2)	PA	2011
 65.52	HFCs	WV	2011
-2452087.15	Fluorinated GHG Production (CO<sub>2</sub>e)	KY	2011
+2452087.15	Fluorinated GHG Production (CO2)	KY	2011
 2723.76	HFCs	MN	2011
 41520.8	Nitrogen Triflouride	NM	2011
 16609.76	PFCs	PA	2011
-20266.49	Fluorinated GHG Production (CO<sub>2</sub>e)	MN	2011
+20266.49	Fluorinated GHG Production (CO2)	MN	2011
 172055.47	PFCs	OR	2011
 12335.84	Nitrogen Triflouride	ME	2011
 23062999.4	Carbon Dioxide	NJ	2011
@@ -332,13 +332,13 @@ metricTons	gasName	state	year
 209574.32	Sulfur Hexafluoride	TN	2011
 507.4	Nitrogen Triflouride	MN	2011
 2473887.9	Biogenic CO2	KY	2011
-1289627.3	Fluorinated GHG Production (CO<sub>2</sub>e)	IL	2011
+1289627.3	Fluorinated GHG Production (CO2)	IL	2011
 215924.55	Sulfur Hexafluoride	MI	2011
 410707.16	Sulfur Hexafluoride	NC	2011
 108310.5	Carbon Dioxide	VT	2010
 2218425.3	HFCs	LA	2011
 27418.08	Sulfur Hexafluoride	NM	2011
-60798.1452	Fluorinated GHG Production (CO<sub>2</sub>e)	AR	2011
+60798.1452	Fluorinated GHG Production (CO2)	AR	2011
 7624.24	HFCs	UT	2011
 331.11	HFCs	PA	2011
 8181.55	HFCs	NM	2011
@@ -386,7 +386,7 @@ metricTons	gasName	state	year
 620	Nitrous Oxide	DC	2011
 448564.88	PFCs	NY	2011
 242138.07	Sulfur Hexafluoride	FL	2011
-224340.62	Fluorinated GHG Production (CO<sub>2</sub>e)	WV	2011
+224340.62	Fluorinated GHG Production (CO2)	WV	2011
 157632.45	Sulfur Hexafluoride	IN	2011
 6922360.5	Biogenic CO2	NC	2010
 3740.35	Sulfur Hexafluoride	NV	2011
@@ -456,7 +456,7 @@ metricTons	gasName	state	year
 3657363.5	Biogenic CO2	MI	2010
 103014.24	Nitrogen Triflouride	UT	2011
 15295548.1	Biogenic CO2	GA	2010
-322028.12	Fluorinated GHG Production (CO<sub>2</sub>e)	AL	2011
+322028.12	Fluorinated GHG Production (CO2)	AL	2011
 13176.07	Sulfur Hexafluoride	VT	2011
 104366.63	PFCs	AZ	2011
 343761.68	PFCs	KY	2010
@@ -538,7 +538,7 @@ metricTons	gasName	state	year
 6290028	Carbon Dioxide	VI	2010
 31119.96	Nitrogen Triflouride	AZ	2011
 1686726.8	Biogenic CO2	ID	2010
-93664.02	Fluorinated GHG Production (CO<sub>2</sub>e)	MI	2011
+93664.02	Fluorinated GHG Production (CO2)	MI	2011
 6283	Biogenic CO2	DC	2010
 3796	HFCs	MO	2011
 898.64	Sulfur Hexafluoride	HI	2011
