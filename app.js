@@ -2,10 +2,11 @@ var express = require('express'),
 	routes = require('./routes'),
 	user = require('./routes/user'),
 	http = require('http'),
+	fs = require('fs'),
 	path = require('path'),
 	mysql = require('mysql'),
 	geoip = require('geoip-lite'),
-	Canvas = require('canvas');
+	Canvas = require('./node_modules/canvas');
 
 var connection = mysql.createConnection({
 	host     : '198.74.61.157',
@@ -78,7 +79,7 @@ app.get('/greencaptcha.js', function(req, res){
 
 //	res.send(geo);
 
-	var question;
+	var question, response = '';
 
 	// randomly pick a question type
 	switch (Math.floor(Math.random() * 3) + 1)
@@ -88,6 +89,18 @@ app.get('/greencaptcha.js', function(req, res){
 			var poundsOfCO2 = 423 * distance * 0.00220462; // 423g/mi * 0.00220462lb/g * n mi = lbs of CO2
 			question = "A " + distance + "-mile trip in the average car produces " + Math.round(poundsOfCO2) + "lbs of CO2";
 			console.log(question);
+			response += "window.input = { ";
+			response += "	id : '',";
+			response += "	imgPath :'" + draw.drawSentence(question) + "',";
+			response += "	type : 'fact'";
+			response += "}; ";
+			fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
+				if (err) console.log(err);
+				response += data;
+				// TODO: concatenate captcha.js to var response.
+				res.send(response);	
+			});
+			
 			break;
 		case 2: // greenhouse gases by state
 			var query = "SELECT * FROM greenhousegasses WHERE state='" + geo.region + "' ORDER BY RAND() LIMIT 0,1"; // pick random row from greenhouse gases table
@@ -95,20 +108,31 @@ app.get('/greencaptcha.js', function(req, res){
 				if (err) console.log(err);
 				question = rows[0].state + " produced " + Math.round(rows[0].metricTons) + " metric tons of " + rows[0].gasName + " in " + rows[0].year + ".";
 				console.log(question);
+				response += "window.input = { ";
+				response += "	id : '',";
+				response += "	imgPath :'" + draw.drawSentence(question) + "',";
+				response += "	type : 'fact'";
+				response += "}; ";
+
+				fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
+					if (err) console.log(err);
+					response += data;
+					// TODO: concatenate captcha.js to var response.
+					res.send(response);	
+				});
 			});
 			break;
 		case 3: // drag 'n' drop
 			question = "dragndrop";
 			// TODO: ROMAN
 			console.log(question);
+			res.send(question);
 			break;
 		default:
 			question = 'An error occurred.';
 			console.log(question);
+			res.send(question);
 	}
-		
-	res.send('asdf');
-
 });
 
 http.createServer(app).listen(app.get('port'), function(){
@@ -117,26 +141,6 @@ http.createServer(app).listen(app.get('port'), function(){
 
 
 // utility functions
-
-function getDistanceFromLatLon(lat1,lon1,lat2,lon2) {
-  var R = 6371; // Radius of the earth in km
-  var dLat = deg2rad(lat2-lat1);  // deg2rad below
-  var dLon = deg2rad(lon2-lon1); 
-  var a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2)
-    ; 
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-  var d = R * c; // Distance in km
-  d *= 0.6214; // Distance in miles
-  return d;
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI/180)
-}
-
 /*
 	GOWTAM: call draw.drawSentence(here goes your string)
 */
