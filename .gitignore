@@ -1,3 +1,5 @@
 .DS_Store
 node_modules/*
-!node_modules/geoip-lite/data/
+!node_modules/geoip-lite/
+node_modules/geoip-lite/*
+!node_modules/geoip-lite/data
