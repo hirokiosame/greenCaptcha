@@ -99,7 +99,3 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
 	window.GreenCaptcha = gc;
 })(window)
-
-$(document).ready(function() {
-	window.captcha = new GreenCaptcha("#sub_nav");
-})
