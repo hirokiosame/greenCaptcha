@@ -4,8 +4,10 @@ greenCaptcha
 Hackathon Project
 
 Include in your html:
-<script src="http://www.romanzubenko.com:3002/greenCaptcha.js"></script>
 
+<pre>
+<script src="http://www.romanzubenko.com:3002/greenCaptcha.js"></script>
+</pre>
 
 How to initialize:
 Provide two arguments: target selector and callback upon result
