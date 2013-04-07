@@ -183,6 +183,7 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 	}
 
 	gc.prototype.validate = function() {
+		var app = this;
 		if (this.answer == undefined || this.answer == null) {
 
 			return;
@@ -195,22 +196,30 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 		};
 
 		$.ajax({
+			type: 'GET',
+			url: "http://www.romanzubenko.com:3002/answer",
 			data:  req,
 			dataType: 'jsonp',
-			url: "www.romanzubenko.com:3002/answer",
 			success: function(data) {
 				console.log('Success');
-				if (data) {
+				if (data.result) {
 					console.log("True Captcha");
 
-					this.desc.html("Captcha was successfully solved!")
+					app.desc.html("Captcha was successfully solved!")
 				} else {
 					console.log("False Captcha");
+					app.desc.html("Captcha was not solved. Try again!")
 				}
 			},
+			complete: function(data) {
+				console.log("complete");
+				console.log(data);
+
+			},
+			
 			fail: function(data) {
 				console.log('fail');
-			}
+			},
 		});
 	}
 
