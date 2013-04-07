@@ -192,9 +192,9 @@ app.get('/greencaptcha.js', function(req, res){
 	});
 
 app.get('/answer', function(req, res) {
-	var id = req.body.id,
-	type = req.body.type,
-	answer = req.body.answer;
+	var id = req.query['id'],
+	type = req.query['type'],
+	answer = req.query['answer'];
 	
 	console.log(answer);
 	// if someone is submitting an answer to a fact,
@@ -218,8 +218,8 @@ app.get('/answer', function(req, res) {
 		connection.query(deleteChallenge, [id], function(delErr, delRows) {
 			if (delErr) console.log(delErr);
 		});
-
-		res.send(response);
+		res.setHeader('Content-Type', 'application/json');
+		res.jsonp({ result: response});
 	});
 	// type = fact || dnd
 	// answer = "word1 word2" || hash of binned item
