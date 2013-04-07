@@ -1,0 +1,71 @@
+<!doctype html>
+ 
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>jQuery UI Droppable - Revert draggable position</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<style>
+div.captcha{
+	width: 300px;
+	height: 100px;
+	border: 1px solid #ccc;
+	background-image: url('public/images/drag/bg.png');
+}
+
+.item1, .item2, .item3, .item4 {
+	width: 40px;
+	height: 40px;
+	float: left;
+	margin: 10px 10px 10px 0;
+}
+
+.bin {
+	width: 40px;
+	height: 40px;
+	float: left;
+	margin: 10px;
+}
+</style>
+<script>
+$(function() {
+	$(".item1").draggable({
+		revert: "invalid"
+	});
+	$(".item2").draggable({
+		revert: "invalid"
+	});
+	$(".item3").draggable({
+		revert: "invalid"
+	});
+	$(".item4").draggable({
+		revert: "invalid"
+	});
+
+	$(".bin").droppable({
+		activeClass: "ui-state-hover",
+		hoverClass: "ui-state-active",
+		drop: function( event, ui ) {
+			$( this ).addClass( "ui-state-highlight" ).find( "p" ).html( "Dropped!" );
+		}
+	});
+
+});
+</script>
+</head>
+<body>
+<div class="captcha">
+	<div class="item1 ui-widget-content"></div>
+	<div class="item2 ui-widget-content"></div>
+	<div class="item3 ui-widget-content"></div>
+	<div class="item4 ui-widget-content"></div>
+
+	<div class="bin ui-widget-header">
+		<p>Drop me here</p>
+	</div>
+ </div>
+ 
+</body>
+</html>

@@ -4,8 +4,8 @@ var express = require('express'),
 	fs = require('fs'),
 	path = require('path'),
 	mysql = require('mysql'),
-	geoip = require('geoip-lite'),
-	Canvas = require('canvas');
+	geoip = require('geoip-lite');
+	//Canvas = require('canvas');
 
 var connection = mysql.createConnection({
 	host     : '198.74.61.157',
@@ -51,37 +51,18 @@ app.get('/', routes.index);
 app.get('/greencaptcha.js', function(req, res){
 	res.header("Content-Type", "text/javascript");
 	var ip = req.header('x-forwarded-for') || req.ip;
+
+	//Demo Mode
 		ip = "128.197.230.201";
 
 	var geo = geoip.lookup(ip);
-	console.log(geo);
 
-/**	http.get({
-		host: "explore.data.gov",
-		port: 80,
-		path: "/resource/t6sb-8txz.json?state="+geo.region+"&year=2010",
-	}, function(res) {
-		var page = "";
-		res.setEncoding("utf8");
-		res.on("data", function(data){
-			page += data;
-		}).on("end", function(){
-
-			data = JSON.parse(page);
-			console.log(data);
-		});
-	}).on('error', function(e) {
-		console.log("Got error: " + e.message);
-	}).end();
-*/
-
-//	res.send(geo);
 
 	var question, response = '';
+	var random = Math.floor(Math.random() * 3) + 1;
 
-	// randomly pick a question type
-	switch (Math.floor(Math.random() * 3) + 1)
-	{
+	//Randomly pick a question type
+	switch( 3 ){
 		case 1: // emissions by distance
 			var distance = Math.floor(Math.random() * 10) + 1; // pick random distance in [0,10]
 			var poundsOfCO2 = 423 * distance * 0.00220462; // 423g/mi * 0.00220462lb/g * n mi = lbs of CO2
@@ -92,10 +73,10 @@ app.get('/greencaptcha.js', function(req, res){
 			response += "	imgPath :'" + draw.drawSentence(question) + "',";
 			response += "	type : 'fact'";
 			response += "}; ";
+			
 			fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
 				if (err) console.log(err);
 				response += data;
-				// TODO: concatenate captcha.js to var response.
 				res.send(response);	
 			});
 			
@@ -115,7 +96,6 @@ app.get('/greencaptcha.js', function(req, res){
 				fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
 					if (err) console.log(err);
 					response += data;
-					// TODO: concatenate captcha.js to var response.
 					res.send(response);	
 				});
 			});
@@ -136,6 +116,10 @@ app.get('/greencaptcha.js', function(req, res){
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+
+
+
 
 
 // utility functions
@@ -213,4 +197,6 @@ draw.distort = function(x,y,width,ctx) {
 draw.rndC = function () {
 	return Math.floor(Math.random() * 100) + 50;
 }
+draw.create = function(){
 
+}
