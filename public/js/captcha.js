@@ -146,7 +146,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 		});
 
 		// Loading bar and messages
-		message = $("<gcap />",{id : "gCaptcha-message"}).appendTo(qArea).css({
+		message = $("<gcap />",{id : "gCaptcha-message"}).appendTo(qArea);
 		$("<gcap />",{id : "gCaptcha-loading"}).appendTo(qArea).css({
 			'height': qArea.height() + "px",
 			'width': '100%',
@@ -176,7 +176,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 		$.ajax({
 			type: 'POST',
 			data:  req,
-			dataType: 'jsonp'
+			dataType: 'jsonp',
 			url: "www.romanzubenko.com:3002/submit",
 			success: function(data) {
 				console.log('Success');

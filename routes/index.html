@@ -2,17 +2,50 @@
 <head>
 	<script src="http://www.romanzubenko.com/collab.io/public/js/jquery.js"></script>
 	<script src="http://www.romanzubenko.com:3002/greenCaptcha.js"></script>
+	<link src="http://www.romanzubenko.com:3002/greenCaptcha.js" />
+	<link rel="stylesheet" href="stylesheets/bootstrap.min.css">
 </head>
 <script>
 $(document).ready(function(){
 	window.captcha = new GreenCaptcha("#captcha"); 
 });
 </script>
-<body>
+<style>
+.greenLine {
+	width: 100%;
+	height: 5px;
+	background: rgb(53, 189, 35);
+}
 
-	<div id="captcha">
+.cover {
+	width: 100%;
+	height: 300px;
+}
+
+.centered {
+	margin: 0 auto;
+	width: 960px;
+}
+
+</style>
+<body>
+	<div class="greenLine"></div>
+	<div class="cover">
+		<br/>
+		<div class="row centered">
+			<div class="span4">
+				<h3>GreenCaptcha</h3>
+				Protecting from bots, saving environment.
+			</div>
+			<div class="span2"></div>
+			<div class="span3" id="captcha">
+				<br/><br/><br/>
+			</div>
+		</div>
+	<div>
+
+	<div 
 		
-	</div>	
 
 </body>
 </html>
