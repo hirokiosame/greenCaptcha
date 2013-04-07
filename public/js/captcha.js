@@ -23,12 +23,18 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 */
 (function(){
 
-	function gc(target) {
+	function gc(target,callback) {
+		this.init(target,callback);
+	}
+
+	gc.prototype.init = function(target,callback) {
+		this.callback = callback;
 		this.id = window.input.id;
 		this.data = window.input.data;
 		this.pointer = target;
 		this.type = window.input.type;
 		this.bin = window.input.bin || null;
+		this.captchaPointer;
 		this.construct();
 		this.answer;
 		this.desc;
@@ -37,7 +43,7 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 	gc.prototype.construct = function() {
 		var app = this;
 		this.trashItems = {};
-		var gCaptcha = $("<gcap />",{id : "gCaptcha"}).css({
+		var gCaptcha = this.captchaPointer =  $("<gcap />",{id : "gCaptcha"}).css({
 			'width': '300px',
 			'margin': '0 auto',
 			'font-family': '"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif',
@@ -89,7 +95,7 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 			binP.droppable({
 				drop: function( event, ui ){
 					if (app.answer !== undefined) {
-
+						
 					}
 					app.answer = ui.draggable[0].hash;
 					console.log(app.answer);
@@ -182,6 +188,32 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 		});
 	}
 
+	gc.prototype.reload = function() {
+		var app = this;
+		$.ajax({
+			type: 'GET',
+			url: "http://www.romanzubenko.com:3002/greenCaptcha.js",
+			data : {reload:true}
+			dataType: 'jsonp',
+			success: function(data) {
+				console.log('New captcha loaded!');
+				this.callback = callback;
+				window.input.id =data.id;
+				window.input.data =data.data;
+				window.input.type = data.type;
+				window.input.bin = data.bin || null;
+				app.captchaPointer.remove();
+				
+				this.init(this.pointe,this.callback)
+				
+			},
+			fail: function(data) {
+				console.log('fail loading new question');
+
+			},
+		});
+	}
+
 	gc.prototype.validate = function() {
 		var app = this;
 		if (this.answer == undefined || this.answer == null) {
@@ -201,6 +233,7 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 			data:  req,
 			dataType: 'jsonp',
 			success: function(data) {
+				app.callback(data);
 				console.log('Success');
 				if (data.result) {
 					console.log("True Captcha");
@@ -209,16 +242,13 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 				} else {
 					console.log("False Captcha");
 					app.desc.html("Captcha was not solved. Try again!")
+					app.reload();
 				}
-			},
-			complete: function(data) {
-				console.log("complete");
-				console.log(data);
-
 			},
 			
 			fail: function(data) {
 				console.log('fail');
+
 			},
 		});
 	}
