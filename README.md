@@ -5,11 +5,11 @@ Hackathon Project
 
 Include in your html:
 
-<pre>
+<code>
 
 <script src="http://www.romanzubenko.com:3002/greenCaptcha.js"></script>
 
-</pre>
+</code>
 
 How to initialize:
 Provide two arguments: target selector and callback upon result
