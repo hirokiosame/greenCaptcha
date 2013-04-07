@@ -82,7 +82,7 @@ app.get('/greencaptcha.js', function(req, res){
 
 				response += "window.input = { ";
 				response += "	id : " + id + ",";
-				response += "	imgPath :'" + drawWords[0] + "',";
+				response += "	data :'" + drawWords[0] + "',";
 				response += "	type : 'fact'";
 				response += "}; ";
 
@@ -109,7 +109,7 @@ app.get('/greencaptcha.js', function(req, res){
 
 					response += "window.input = { ";
 					response += "	id : " + id + ",";
-					response += "	imgPath :'" + drawWords[0] + "',";
+					response += "	data :'" + drawWords[0] + "',";
 					response += "	type : 'fact'";
 					response += "}; ";
 
@@ -124,28 +124,28 @@ app.get('/greencaptcha.js', function(req, res){
 			break;
 		case 3: // drag 'n' drop
 			question = "dragndrop";
-			var availableBins = ['cansbottlesbin.png', 'paperbin.png', 'compostbin.png', 'landfillbin.png'];
+			var availableBins = ['binBC.png', 'binPaper.png', 'binCompost.png', 'binLandfill.png'];
 			var randomBin = availableBins[Math.floor(Math.random() * 4)]; // pick a random bin
 			console.log(randomBin);
 			// now let's figure out the valid and invalid items for the bin we chose
 			var availableValidItems;
 			var availableInvalidItems;
 			switch (randomBin) {
-				case 'cansbottlesbin.png':
-					availableValidItems = ['plasticbottle.png', 'sodacan.png', 'beerbottle.png'];
-					availableInvalidItems = ['papertrash.png', 'cardboardbox.png', 'pizza.png', 'burger.png', 'bagofchips.png', 'lightbulb.png'];
+				case 'binBC.png':
+					availableValidItems = ['plasticbottle.png', 'can.png', 'glassbottle.png'];
+					availableInvalidItems = ['paper.png', 'box.png', 'pizza.png', 'burger.png', 'chips.png', 'lightbulb.png'];
 					break;
-				case 'paperbin.png':
-					availableValidItems = ['papertrash.png', 'cardboardbox.png'];
-					availableInvalidItems = ['plasticbottle.png', 'sodacan.png', 'beerbottle.png', 'pizza.png', 'burger.png', 'bagofchips.png', 'lightbulb.png'];
+				case 'binPaper.png':
+					availableValidItems = ['paper.png', 'box.png'];
+					availableInvalidItems = ['plasticbottle.png', 'can.png', 'glassbottle.png', 'pizza.png', 'burger.png', 'chips.png', 'lightbulb.png'];
 					break;
-				case 'compostbin.png':
+				case 'binCompost.png':
 					availableValidItems = ['pizza.png', 'burger.png']; 
-					availableInvalidItems = ['papertrash.png', 'cardboardbox.png', 'plasticbottle.png', 'sodacan.png', 'beerbottle.png', 'bagofchips.png', 'lightbulb.png'];
+					availableInvalidItems = ['paper.png', 'box.png', 'plasticbottle.png', 'can.png', 'glassbottle.png', 'chips.png', 'lightbulb.png'];
 					break;
-				case 'landfillbin.png':
-					availableValidItems = ['bagofchips.png', 'lightbulb.png'];
-					availableInvalidItems = ['plasticbottle.png', 'sodacan.png', 'beerbottle.png', 'papertrash.png', 'cardboardbox.png', 'pizza.png', 'burger.png'];
+				case 'binLandfill.png':
+					availableValidItems = ['chips.png', 'lightbulb.png'];
+					availableInvalidItems = ['plasticbottle.png', 'can.png', 'glassbottle.png', 'paper.png', 'box.png', 'pizza.png', 'burger.png'];
 					break;
 			}
 
@@ -170,7 +170,7 @@ app.get('/greencaptcha.js', function(req, res){
 
 				response += "window.input = { ";
 				response += "	id : " + id + ",";
-				response += "	trashHashes : " + JSON.stringify(trashHashes) + ",";
+				response += "	data : " + JSON.stringify(trashHashes) + ",";
 				response += "	bin : '" + randomBin + "',";
 				response += "	type : 'dnd'";
 				response += "}; ";
