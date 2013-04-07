@@ -6,7 +6,9 @@ Hackathon Project
 Include in your html:
 
 <pre>
+
 <script src="http://www.romanzubenko.com:3002/greenCaptcha.js"></script>
+
 </pre>
 
 How to initialize:
