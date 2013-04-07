@@ -204,7 +204,9 @@
 			'float': 'left'
 		});
 
+		
 
+		
 
 		$("<gcap />", {
 			id : "gCaptcha-submit",
@@ -230,6 +232,22 @@
 			});
 		});
 
+		var reload = $("<gcap />", {
+			id : "gCaptcha-reload",
+		}).appendTo(gBottom).css({
+			'height': '26px',
+			'width': '26px',
+			'border': '1px solid #cdcdcd',
+			'border-radius': '2px',
+			'float': 'right',
+			'display': 'block',
+			'cursor': 'pointer',
+			'font-size': '12px',
+			'margin-right': '3px'
+		});
+
+		$("<img/>",{src:"http://romanzubenko.com:3002/images/reload.png"}).appendTo(reload);
+
 		// Loading bar and messages
 		/*message = $("<gcap />",{id : "gCaptcha-message"}).appendTo(qArea);
 		$("<gcap />",{id : "gCaptcha-loading"}).appendTo(qArea).css({
@@ -252,11 +270,15 @@
 			}
 			app.validate();
 		});
+		$(document).on('click', '#gCaptcha-reload', function(){
+			app.reload();
+		});
 	}
 
 	gc.prototype.reload = function() {
 		var app = this;
 		$(document).off('click','#gCaptcha-submit');
+		$(document).off('click','#gCaptcha-reload');
 		$.ajax({
 			type: 'GET',
 			url: "http://www.romanzubenko.com:3002/greenCaptcha.js",
