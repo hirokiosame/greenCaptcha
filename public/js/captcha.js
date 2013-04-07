@@ -33,6 +33,12 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 		this.data = window.input.data;
 		this.pointer = target;
 		this.type = window.input.type;
+
+		if(this.type == "fact"){
+			this.typeDesc = "Enter the <strong>words highlighted</strong> in the sentence and click <strong>Submit</strong>!";
+		}else{
+			this.typeDesc = "<strong>Drag the item</strong> that belongs in the bin and click <strong>Submit</strong>!";
+		}
 		console.log(this.type);
 		this.bin = window.input.bin || null;
 		this.captchaPointer;
@@ -44,7 +50,9 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 	gc.prototype.construct = function() {
 		var app = this;
 		this.trashItems = {};
-		var gCaptcha = this.captchaPointer =  $("<gcap />",{id : "gCaptcha"}).css({
+		var gCaptcha = this.captchaPointer =  $("<gcap />", {
+			id : "gCaptcha"
+		}).css({
 			'width': '300px',
 			'margin': '0 auto',
 			'font-family': '"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif',
@@ -52,25 +60,32 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 			'letterSpacing': '0',
 			'position': 'relative',
 			'background': '#fff',
-			'box-shadow': '0px -1px 18px -2px #111'
+			'box-shadow': '0px -1px 18px -2px #111',
+			'border-radius': '4px'
 		}),
-		gBody = $("<gcap />",{id : "gCaptcha-body"}).appendTo(gCaptcha).css({
-			'border-top': '1px solid #cdcdcd'
-		}),
+		gBody = $("<gcap />", {
+			id: "gCaptcha-body"
+		}).appendTo(gCaptcha),
 		gBottom;
 
-		this.desc = $("<gcap />",{id : "gCaptcha-description", text: "Type last two word of the sentence to the input box and click submit!"}).appendTo(gBody).css({
+		this.desc = $("<gcap />", {
+			id: "gCaptcha-description",
+			html: app.typeDesc
+		}).appendTo(gBody).css({
+			'line-height': '18px',
 			'padding': '8px',
 			'font-size': '13px',
 			'border-left': '3px solid rgb(34, 156, 83)',
 			'border-right': '1px solid #cdcdcd',
-			'min-height': '30px',
+			'height': '41px',
 			'background': 'rgb(245, 252, 245)',
 			'border-bottom': '1px solid #cdcdcd',
 			'position': 'relative'
 		});
 
-		var qArea = $("<gcap />",{id : "gCaptcha-question_area"}).appendTo(gBody).css({
+		var qArea = $("<gcap />", {
+			id : "gCaptcha-question_area"
+		}).appendTo(gBody).css({
 			'min-height': '30px',
 			'border-left': '1px solid #cdcdcd',
 			'border-right': '1px solid #cdcdcd',
@@ -78,7 +93,11 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 		});
 
 		if (this.type == "fact") {
-			$("<img />",{id : "gCaptcha-question"}).attr('src',app.data).appendTo(qArea);
+			$("<img />", {
+				id: "gCaptcha-question",
+				src: app.data
+			}).appendTo(qArea);
+
 			$("<input/>",{id : "gCaptcha-input"}).attr('type','text').appendTo(qArea).css({
 				'width': '263px',
 				'margin-left': '20px',
@@ -106,11 +125,15 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 			console.log("binP droppable");
 			binP.droppable({
 				drop: function( event, ui ){
-					if (app.answer !== undefined) {
+					if (app.answer !== undefined && ui.draggable[0].hash!=app.answer ) {
+						//There was an item dropped Previously
+						var pitem = app.trashItems[app.answer];
+						$(pitem).animate({ 
+							left: "-=130px",
+						}, 150);
 
 					}
 					app.answer = ui.draggable[0].hash;
-					console.log(app.answer);
 
 					//Put back
 					$(".item").each(function(e){
@@ -121,6 +144,9 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 							$(this).draggable( "option", "revert", true );
 						}
 					});
+				},
+				out: function(event, ui){
+					app.answer = undefined;
 				}
 			});
 
@@ -136,6 +162,7 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 					'top':'25px',
 					'left': (position+10)+'px'
 				}).appendTo(qArea).draggable({
+					cursor: 'pointer',
 					containment: qArea,
 					stack: "div.bin"
 				});
@@ -148,7 +175,9 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 		}
 
 
-		gBottom = $("<gcap />",{id : "gCaptcha-bottom"}).appendTo(gCaptcha).css({
+		gBottom = $("<gcap />", {
+			id : "gCaptcha-bottom"
+		}).appendTo(gCaptcha).css({
 			'border-bottom-right-radius': '4px',
 			'border-bottom-left-radius': '4px',
 			'height': '30px',
@@ -156,7 +185,10 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 			'border': '1px solid #cdcdcd'
 		});
 
-		$("<img />",{id : "gCaptcha-logo", src : "http://www.romanzubenko.com:3002/images/greenCaptcha-logo.png"}).appendTo(gBottom).css({
+		$("<img />", {
+			id: "gCaptcha-logo",
+			src: "http://www.romanzubenko.com:3002/images/greenCaptcha-logo.png"
+		}).appendTo(gBottom).css({
 			'font-weight': '600',
 			'width': '154px',
 			'margin-top': '-11px',
@@ -166,7 +198,10 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 
 
 
-		$("<gcap />",{id : "gCaptcha-submit", text : "Submit"}).appendTo(gBottom).css({
+		$("<gcap />", {
+			id : "gCaptcha-submit",
+			text : "Submit"
+		}).appendTo(gBottom).css({
 			'height': '16px',
 			'padding': '5px 8px 5px 8px',
 			'border': '1px solid #cdcdcd',
@@ -177,6 +212,14 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 			'cursor': 'pointer',
 			'font-size': '12px',
 			'background-image': '-webkit-linear-gradient(top, rgb(255, 255, 255), rgb(238, 238, 238))'
+		}).hover(function(){
+			$(this).css({
+				'background-image': '-webkit-linear-gradient(top, rgb(238, 238, 238), rgb(255, 255, 255))'
+			});
+		}, function(){
+			$(this).css({
+				'background-image': '-webkit-linear-gradient(top, rgb(255, 255, 255), rgb(238, 238, 238))'
+			});
 		});
 
 		// Loading bar and messages
@@ -192,10 +235,10 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 		//document.styleSheets[0].insertRule('#gCaptcha-submit :hover {border-left: 3px solid rgb(30, 145, 26)}', 0);
 		gCaptcha.appendTo(this.pointer);
 		console.log(this.pointer)
-		$("gcap").css("display","block").css("all","default;");
+		$("gcap").css("display","block").css("all", "default;");
 
 
-		$(document).on('click','#gCaptcha-submit',function(){
+		$(document).on('click', '#gCaptcha-submit', function(){
 			if (app.type == 'fact') {
 				app.answer = $("#gCaptcha-input").val();
 			}
@@ -237,10 +280,9 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 	gc.prototype.validate = function() {
 		var app = this;
 		if (this.answer == undefined || this.answer == null) {
-
 			return;
 		}
-
+		$("#gCaptcha-submit").attr('disabled', 'disabled');
 		var req = {
 			id: this.id,
 			type: this.type,
@@ -259,7 +301,10 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 					console.log("True Captcha");
 
 					app.desc.html("Captcha was successfully solved!<br/>")
-					$("<img/>",{src:"images/check-mark.png", id : "gCaptcha-check"}).appendTo(app.desc).css({
+					$("<img/>", {
+						src:"images/check-mark.png",
+						id: "gCaptcha-check"
+					}).appendTo(app.desc).css({
 						"float": "right",
 						"height": "40px",
 						"right": "3px",
@@ -272,7 +317,6 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 					app.reload();
 				}
 			},
-			
 			fail: function(data) {
 				console.log('fail');
 
