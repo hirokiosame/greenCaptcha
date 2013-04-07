@@ -191,7 +191,7 @@ app.get('/greencaptcha.js', function(req, res){
 		}
 	});
 
-app.post('/answer', function(req, res) {
+app.get('/answer', function(req, res) {
 	var id = req.body.id,
 	type = req.body.type,
 	answer = req.body.answer;
