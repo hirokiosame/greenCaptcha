@@ -19,7 +19,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
 	function gc(target) {
 		this.id = window.input.id;
-		this.imgPath = window.input.imgPath;
+		this.data = window.input.data;
 		this.pointer = target;
 		this.type = window.input.type;
 		this.bin = window.input.bin || null;
@@ -60,7 +60,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 		});
 
 		if (this.type === "fact") {
-			$("<img />",{id : "gCaptcha-question"}).attr('src',app.imgPath).appendTo(qArea);
+			$("<img />",{id : "gCaptcha-question"}).attr('src',app.data).appendTo(qArea);
 			$("<input/>",{id : "gCaptcha-input"}).attr('type','text').appendTo(qArea);
 		}else{
 			//Drag and Drop!
