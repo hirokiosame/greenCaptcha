@@ -10,17 +10,14 @@
 	s1.src='http://code.jquery.com/jquery-1.9.1.js';
 	h.appendChild(s1);
 	s1.onload=function(){
-		console.log('jq');
+		s2.type='text/javascript';
+		s2.async=true;
+		s2.src='http://code.jquery.com/ui/1.10.2/jquery-ui.js';
+		h.appendChild(s2);
+		s2.onload=function(){
+			console.log('jqui');
+		};
 	};
-
-	s2.type='text/javascript';
-	s2.async=true;
-	s2.src='http://code.jquery.com/ui/1.10.2/jquery-ui.js';
-	h.appendChild(s2);
-	s2.onload=function(){
-		console.log('jqui');
-	};
-
 }());
 
 
