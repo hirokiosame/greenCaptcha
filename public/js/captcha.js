@@ -23,13 +23,11 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 		this.pointer = target;
 		this.type = window.input.type;
 		this.construct();
+		this.answer;
 
 	}
 
 	gc.prototype.construct = function() {
-
-
-
 		var app = this;
 
 		var gCaptcha = $("<gcap />",{id : "gCaptcha"}).css({
@@ -43,6 +41,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 			'border-top': '1px solid #cdcdcd'
 		}),
 		gBottom;
+
 		$("<gcap />",{id : "gCaptcha-description", text: "Type last two word of the sentence to the input box and click submit!"}).appendTo(gBody).css({
 			'padding': '8px',
 			'font-size': '13px',
@@ -52,11 +51,13 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 			'background': 'rgb(245, 252, 245)',
 			'border-bottom': '1px solid #cdcdcd'
 		});
+
 		var qArea = $("<gcap />",{id : "gCaptcha-question_area"}).appendTo(gBody).css({
 			'min-height': '30px',
 			'border-left': '1px solid #cdcdcd',
 			'border-right': '1px solid #cdcdcd'
 		});
+
 		if (this.type === "fact") {
 			$("<img />",{id : "gCaptcha-question"}).attr('src',app.imgPath).appendTo(qArea);
 			$("<input/>",{id : "gCaptcha-input"}).attr('type','text').appendTo(qArea);
@@ -69,6 +70,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 			'padding': '10px',
 			'border': '1px solid #cdcdcd'
 		});
+
 		$("<img />",{id : "gCaptcha-logo", src : "http://www.romanzubenko.com:3002/images/greenCaptcha-logo.png"}).appendTo(gBottom).css({
 			'font-weight': '600',
 			'width': '154px',
@@ -76,6 +78,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 			'display': 'block',
 			'float': 'left'
 		});
+
 		$("<gcap />",{id : "gCaptcha-submit", text : "Submit"}).appendTo(gBottom).css({
 			'height': '16px',
 			'padding': '5px 8px 5px 8px',
@@ -95,6 +98,31 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 		$("gcap").css("display","block").css("all","default;");
 	}
 
+	gc.prototype.validate = function() {
+		var req = {
+			id: this.id,
+			type: this.type,
+			answer: this.answer
+		};
+
+		$.ajax({
+			type: 'POST',
+			data:  req,
+			dataType: 'jsonp'
+			url: "www.romanzubenko.com:3002/submit",
+			success: function(data) {
+				console.log('Success');
+				if (data) {
+					console.log("True Captcha");
+				} else {
+					console.log("False Captcha");
+				}
+			},
+			fail: function(data) {
+				console.log('fail');
+			}
+		});
+	}
 
 
 	window.GreenCaptcha = gc;

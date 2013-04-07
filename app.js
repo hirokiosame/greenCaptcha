@@ -46,7 +46,9 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+app.get('/', function(req, res){
+	res.sendfile('./routes/index.html');
+});
 
 app.get('/greencaptcha.js', function(req, res){
 	res.header("Content-Type", "text/javascript");
@@ -70,7 +72,7 @@ app.get('/greencaptcha.js', function(req, res){
 			console.log(question);
 			response += "window.input = { ";
 			response += "	id : '',";
-			response += "	imgPath :'" + draw.drawSentence(question) + "',";
+			response += "	imgPath :'" + draw.drawSentence(question)[0] + "',";
 			response += "	type : 'fact'";
 			response += "}; ";
 			
@@ -136,7 +138,7 @@ draw.drawSentence = function (sentence) {
 	w2 = Math.floor(Math.random()*tokens.length),
 	ctx = canvas.getContext('2d');
 	
-	ctx.font = '12px Times';
+	ctx.font = 'bold 12px Times';
 	ctx.beginning = 20;
 	ctx.fontSize = 12;
 	ctx.width = canvas.width;
@@ -158,7 +160,7 @@ draw.drawSentence = function (sentence) {
 
 	ctx.rotate(0.2);
 
-	return [canvas.toDataURL(),tokens[w1],tokens[w2]; // returns base64 img png
+	return [canvas.toDataURL(),tokens[w1],tokens[w2]]; // returns base64 img png
 }
 
 // input word, x,y; return final x,y,length
@@ -181,21 +183,33 @@ draw.drawWord = function (word,x,y,distortC,ctx) {
 }
 
 draw.distort = function(x,y,width,ctx) {
-
+	var path = [x + Math.floor(Math.random() * width),y + Math.floor(Math.random() * ctx.fontSize) - 10];
 	// Add random lines
 	for (var i = 0, lim =  Math.floor(Math.random() * 5 + 3); i < lim; i++) {
-		ctx.strokeStyle = 'rgba(' + this.rndC() + ',' + this.rndC() + ',' + this.rndC() + ',0.7)';
+		ctx.strokeStyle = this.rndC();
 		ctx.lineWidth = Math.floor(Math.random() * 2 + 1);
 		ctx.beginPath();
-		ctx.lineTo(x + Math.floor(Math.random() * width), y + Math.floor(Math.random() * ctx.fontSize) - 10);
-		ctx.lineTo(x + Math.floor(Math.random() * width), y + Math.floor(Math.random() * ctx.fontSize) - 10);
+		ctx.lineTo(path[0], path[1]);
+		path = [x + Math.floor(Math.random() * width),y + Math.floor(Math.random() * ctx.fontSize) - 10];
+		ctx.lineTo(path[0], path[1]);
 		ctx.stroke();
-	}
+	};
 
 }
 
 draw.rndC = function () {
-	return Math.floor(Math.random() * 100) + 50;
+	var colors = [0,0,0],
+	ind = 0,
+	str = '';
+	colors[Math.floor(Math.random() * 3)] = 255;
+	ind = Math.floor(Math.random() * 3);
+	while (colors[ind] === 255) {
+		ind = Math.floor(Math.random() * 3);
+	}
+	colors[ind] = Math.floor(Math.random() * 255);
+
+	str = 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',0.7)'
+	return str;
 }
 draw.create = function(){
 
