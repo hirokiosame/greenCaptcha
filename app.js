@@ -31,6 +31,14 @@ connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
 connection.end();
 */
 
+function numberFormat(val){
+	while (/(\d+)(\d{3})/.test(val.toString())){
+		val = val.toString().replace(/(\d+)(\d{3})/, '$1'+','+'$2');
+	}
+	return val;
+}
+
+
 var app = express();
 
 // all environments
@@ -47,7 +55,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
-
 app.get('/', function(req, res){
 	res.sendfile('./routes/index.html');
 });
@@ -70,9 +77,9 @@ app.get('/greencaptcha.js', function(req, res){
 	//Randomly pick a question type
 	switch( random ){
 		case 1: // emissions by distance
-			var distance = Math.floor(Math.random() * 10) + 1; // pick random distance in (0,10]
-			var poundsOfCO2 = 423 * distance * 0.00220462; // 423g/mi * 0.00220462lb/g * n mi = lbs of CO2
-			question = "A " + distance + "-mile trip in the average car produces " + Math.round(poundsOfCO2) + "lbs of CO2";
+			var distance = numberFormat( Math.floor(Math.random() * 10) + 1 ); // pick random distance in (0,10]
+			var poundsOfCO2 = numberFormat( Math.round(423 * distance * 0.00220462) ); // 423g/mi * 0.00220462lb/g * n mi = lbs of CO2
+			question = "A " + distance + "-mile trip in the average car produces " + poundsOfCO2 + "lbs of CO2";
 			console.log(question);
 			var drawWords = draw.preDraw(question);
 			var answerHash = crypto.createHash('md5').update(drawWords[1] + " " + drawWords[2]).digest('hex');
@@ -104,7 +111,8 @@ app.get('/greencaptcha.js', function(req, res){
 			var query = "SELECT * FROM greenhousegasses WHERE state='" + geo.region + "' ORDER BY RAND() LIMIT 0,1"; // pick random row from greenhouse gases table
 			connection.query(query, function(err, rows, fields) {
 				if (err) console.log(err);
-				question = rows[0].state + " produced " + Math.round(rows[0].metricTons) + " metric tons of " + rows[0].gasName + " in " + rows[0].year;
+
+				question = rows[0].state + " produced " + numberFormat( Math.round(rows[0].metricTons) ) + " metric tons of " + rows[0].gasName + " in " + numberFormat( rows[0].year );
 				console.log(question);
 				var drawWords = draw.preDraw(question);
 				var answerHash = crypto.createHash('md5').update(drawWords[1] + " " + drawWords[2]).digest('hex');
