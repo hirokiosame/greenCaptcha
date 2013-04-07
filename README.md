@@ -13,8 +13,8 @@ How to initialize:
 Provide two arguments: target selector and callback upon result
 
 ```javascript
-window.captcha = new GreenCaptcha("#captcha",function(result){
-    if (result) {
+window.captcha = new GreenCaptcha("#captcha",function(success){
+    if (success) {
 			console.log("Green Capptcha works: pass");
 		} else {
 			console.log("Green Capptcha works: not pass");
