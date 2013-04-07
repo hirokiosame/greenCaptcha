@@ -1,11 +1,13 @@
 var express = require('express'),
-	routes = require('./routes'),
-	http = require('http'),
-	fs = require('fs'),
-	path = require('path'),
-	mysql = require('mysql'),
-	geoip = require('geoip-lite');
-	//Canvas = require('canvas');
+routes = require('./routes'),
+user = require('./routes/user'),
+http = require('http'),
+fs = require('fs'),
+path = require('path'),
+mysql = require('mysql'),
+geoip = require('geoip-lite'),
+crypto = require('crypto'),
+Canvas = require('./node_modules/canvas');
 
 var connection = mysql.createConnection({
 	host     : '198.74.61.157',
@@ -43,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 }
 
 app.get('/', function(req, res){
@@ -63,36 +65,114 @@ app.get('/greencaptcha.js', function(req, res){
 	var question, response = '';
 	var random = Math.floor(Math.random() * 3) + 1;
 
+
 	//Randomly pick a question type
-	switch( 3 ){
+	switch( random ){
 		case 1: // emissions by distance
-			var distance = Math.floor(Math.random() * 10) + 1; // pick random distance in [0,10]
+			var distance = Math.floor(Math.random() * 10) + 1; // pick random distance in (0,10]
 			var poundsOfCO2 = 423 * distance * 0.00220462; // 423g/mi * 0.00220462lb/g * n mi = lbs of CO2
 			question = "A " + distance + "-mile trip in the average car produces " + Math.round(poundsOfCO2) + "lbs of CO2";
 			console.log(question);
-			response += "window.input = { ";
-			response += "	id : '',";
-			response += "	imgPath :'" + draw.drawSentence(question)[0] + "',";
-			response += "	type : 'fact'";
-			response += "}; ";
-			
-			fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
+			var drawWords = draw.drawSentence(question);
+			var answerHash = crypto.createHash('md5').update(drawWords[1] + " " + drawWords[2]).digest('hex');
+			var save = "INSERT INTO challenges (answer) VALUES ('" + answerHash + "')";
+			connection.query(save, function(err, info) {
 				if (err) console.log(err);
-				response += data;
-				res.send(response);	
+				var id = info.insertId;
+
+				response += "window.input = { ";
+				response += "	id : " + id + ",";
+				response += "	imgPath :'" + drawWords[0] + "',";
+				response += "	type : 'fact'";
+				response += "}; ";
+
+				fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
+					if (err) console.log(err);
+					response += data;
+					// TODO: concatenate captcha.js to var response.
+					res.send(response);	
+				});
 			});
-			
 			break;
 		case 2: // greenhouse gases by state
 			var query = "SELECT * FROM greenhousegasses WHERE state='" + geo.region + "' ORDER BY RAND() LIMIT 0,1"; // pick random row from greenhouse gases table
 			connection.query(query, function(err, rows, fields) {
 				if (err) console.log(err);
-				question = rows[0].state + " produced " + Math.round(rows[0].metricTons) + " metric tons of " + rows[0].gasName + " in " + rows[0].year + ".";
+				question = rows[0].state + " produced " + Math.round(rows[0].metricTons) + " metric tons of " + rows[0].gasName + " in " + rows[0].year;
 				console.log(question);
+				var drawWords = draw.drawSentence(question);
+				var answerHash = crypto.createHash('md5').update(drawWords[1] + " " + drawWords[2]).digest('hex');
+				var save = "INSERT INTO challenges (answer) VALUES ('" + answerHash + "')";
+				connection.query(save, function(err, info) {
+					if (err) console.log(err);
+					var id = info.insertId;
+
+					response += "window.input = { ";
+					response += "	id : " + id + ",";
+					response += "	imgPath :'" + drawWords[0] + "',";
+					response += "	type : 'fact'";
+					response += "}; ";
+
+					fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
+						if (err) console.log(err);
+						response += data;
+						// TODO: concatenate captcha.js to var response.
+						res.send(response);	
+					});
+				});
+			});
+			break;
+		case 3: // drag 'n' drop
+			question = "dragndrop";
+			var availableBins = ['cansbottlesbin.png', 'paperbin.png', 'compostbin.png', 'landfillbin.png'];
+			var randomBin = availableBins[Math.floor(Math.random() * 4)]; // pick a random bin
+			console.log(randomBin);
+			// now let's figure out the valid and invalid items for the bin we chose
+			var availableValidItems;
+			var availableInvalidItems;
+			switch (randomBin) {
+				case 'cansbottlesbin.png':
+					availableValidItems = ['plasticbottle.png', 'sodacan.png', 'beerbottle.png'];
+					availableInvalidItems = ['papertrash.png', 'cardboardbox.png', 'pizza.png', 'burger.png', 'bagofchips.png', 'lightbulb.png'];
+					break;
+				case 'paperbin.png':
+					availableValidItems = ['papertrash.png', 'cardboardbox.png'];
+					availableInvalidItems = ['plasticbottle.png', 'sodacan.png', 'beerbottle.png', 'pizza.png', 'burger.png', 'bagofchips.png', 'lightbulb.png'];
+					break;
+				case 'compostbin.png':
+					availableValidItems = ['pizza.png', 'burger.png']; 
+					availableInvalidItems = ['papertrash.png', 'cardboardbox.png', 'plasticbottle.png', 'sodacan.png', 'beerbottle.png', 'bagofchips.png', 'lightbulb.png'];
+					break;
+				case 'landfillbin.png':
+					availableValidItems = ['bagofchips.png', 'lightbulb.png'];
+					availableInvalidItems = ['plasticbottle.png', 'sodacan.png', 'beerbottle.png', 'papertrash.png', 'cardboardbox.png', 'pizza.png', 'burger.png'];
+					break;
+			}
+
+			// pick a random valid item to be the "correct answer"
+			var randomValidItem = availableValidItems[Math.floor(Math.random() * availableValidItems.length)];
+			availableInvalidItems = shuffle(availableInvalidItems); // randomize the list of invalid items
+			// create a random hash for the "right answer"
+			var answerHash = crypto.createHash('md5').update(Math.random().toString(36).substring(7)).digest('hex');
+			var save = "INSERT INTO challenges (answer) VALUES ('" + answerHash + "')"; // enter the record of the right answer into db
+			
+			var trashHashes = [];
+			trashHashes.push([answerHash,randomValidItem]); // add our correct answer to the list of icons to be drawn, indexed by its hash
+
+			connection.query(save, function(err, info) {
+				if (err) console.log(err);
+				var id = info.insertId; // grab the primarykey of the correct answer
+
+				for (var i = 0; i < 2; i++) // now add two invalid icons to the list, indexed by random hashes
+					trashHashes.push([(crypto.createHash('md5').update(Math.random().toString(36).substring(7)).digest('hex')),availableInvalidItems.pop()]);
+				console.log(trashHashes);	
+				trashHashes = shuffle(trashHashes);
+
 				response += "window.input = { ";
-				response += "	id : '',";
-				response += "	imgPath :'" + draw.drawSentence(question) + "',";
-				response += "	type : 'fact'";
+				response += "	id : " + id + ",";
+				response += "	trashHashes : " + JSON.stringify(trashHashes) + ",";
+				response += "	bin : '" + randomBin + "',";
+				response += "	type : 'dnd'";
 				response += "}; ";
 
 				fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
@@ -100,23 +180,53 @@ app.get('/greencaptcha.js', function(req, res){
 					response += data;
 					res.send(response);	
 				});
+
+				console.log(question);
 			});
-			break;
-		case 3: // drag 'n' drop
-			question = "dragndrop";
-			// TODO: ROMAN
-			console.log(question);
-			res.send(question);
 			break;
 		default:
 			question = 'An error occurred.';
 			console.log(question);
-			res.send(question);
-	}
+			res.send(500, question);
+		}
+	});
+
+app.post('/answer', function(req, res) {
+	var id = req.body.id,
+	type = req.body.type,
+	answer = req.body.answer;
+	
+	console.log(answer);
+	// if someone is submitting an answer to a fact,
+	// we want to hash their two-word answer into an md5
+	// to compare with the database
+	if (type == 'fact')
+		answer = crypto.createHash('md5').update(answer).digest('hex');
+
+	console.log(answer);
+	var query = "SELECT * FROM challenges WHERE id=? AND answer=?";
+	connection.query(query, [id, answer], function(err, rows) {
+		var response;
+		console.log("id=" + id + ",answer=" + answer);
+		console.log(rows);
+		if (rows.length === 1) // if we found exactly one record
+			response = true;
+		else
+			response = false;
+
+		var deleteChallenge = "DELETE FROM challenges WHERE id=?";
+		connection.query(deleteChallenge, [id], function(delErr, delRows) {
+			if (delErr) console.log(delErr);
+		});
+
+		res.send(response);
+	});
+	// type = fact || dnd
+	// answer = "word1 word2" || hash of binned item
 });
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+	console.log('Express server listening on port ' + app.get('port'));
 });
 
 
@@ -125,13 +235,23 @@ http.createServer(app).listen(app.get('port'), function(){
 
 
 // utility functions
-/*
-	GOWTAM: call draw.drawSentence(here goes your string)
-*/
+
+function shuffle(data) {
+	var n = data.length;
+	for(var i = n - 1; i > 0; i--) {
+		var j = Math.floor(Math.random() * (i + 1));
+		var tmp = data[i];
+		data[i] = data[j];
+		data[j] = tmp;
+	}
+	return data;
+}
+
+
 
 var draw = {};
 draw.drawSentence = function (sentence) {
-	
+
 	var canvas = new Canvas(300,80),
 	tokens = sentence.split(' '),
 	w1 = Math.floor(Math.random()*tokens.length),
@@ -145,7 +265,7 @@ draw.drawSentence = function (sentence) {
 
 
 	while (w2 === w1) {
-	w2 = Math.floor(Math.random()*tokens.length);
+		w2 = Math.floor(Math.random()*tokens.length);
 	}
 
 	//go thru words
@@ -160,7 +280,8 @@ draw.drawSentence = function (sentence) {
 
 	ctx.rotate(0.2);
 
-	return [canvas.toDataURL(),tokens[w1],tokens[w2]]; // returns base64 img png
+	console.log(tokens[w1].trim() + " " + tokens[w2].trim());
+	return [canvas.toDataURL(),tokens[w1].trim(),tokens[w2].trim()]; // returns base64 img png
 }
 
 // input word, x,y; return final x,y,length
