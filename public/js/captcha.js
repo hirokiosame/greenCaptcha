@@ -24,6 +24,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 		this.type = window.input.type;
 		this.construct();
 		this.answer;
+		this.desc;
 
 	}
 
@@ -42,7 +43,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 		}),
 		gBottom;
 
-		$("<gcap />",{id : "gCaptcha-description", text: "Type last two word of the sentence to the input box and click submit!"}).appendTo(gBody).css({
+		this.desc = $("<gcap />",{id : "gCaptcha-description", text: "Type last two word of the sentence to the input box and click submit!"}).appendTo(gBody).css({
 			'padding': '8px',
 			'font-size': '13px',
 			'border-left': '3px solid rgb(34, 156, 83)',
@@ -92,6 +93,16 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 			'background-image': '-webkit-linear-gradient(top, rgb(255, 255, 255), rgb(238, 238, 238))'
 		});
 
+		// Loading bar and messages
+		message = $("<gcap />",{id : "gCaptcha-message"}).appendTo(qArea).css({
+		$("<gcap />",{id : "gCaptcha-loading"}).appendTo(qArea).css({
+			'height': qArea.height() + "px",
+			'width': '100%',
+			'position': 'absolute',
+			'display': 'none',
+			'background-image': 'rgb(3,3,3,0.7)'
+		});
+
 		//document.styleSheets[0].insertRule('#gCaptcha-submit :hover {border-left: 3px solid rgb(30, 145, 26)}', 0);
 		gCaptcha.appendTo(this.pointer);
 		console.log(this.pointer)
@@ -99,6 +110,11 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 	}
 
 	gc.prototype.validate = function() {
+		if (this.answer == undefined || this.answer == null) {
+
+			return;
+		}
+
 		var req = {
 			id: this.id,
 			type: this.type,
@@ -114,6 +130,8 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 				console.log('Success');
 				if (data) {
 					console.log("True Captcha");
+
+					this.desc.html("Captcha was successfully solved!")
 				} else {
 					console.log("False Captcha");
 				}
