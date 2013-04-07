@@ -269,14 +269,27 @@ function shuffle(data) {
 
 
 var draw = {};
-draw.drawSentence = function (sentence) {
+draw.preDraw = function (sentence) {
 
 	var canvas = new Canvas(300,80),
+	app = 
+	base_image = new Image(),
+	ctx = canvas.getContext('2d');
+  	base_image.src = 'images/base.png';
+  	base_image.onload = function(){
+   		context.drawImage(base_image, 100, 100);
+
+  	}
+}
+draw.drawSentence = function (sentence) {
+	
+
+	
 	tokens = sentence.split(' '),
 	w1 = Math.floor(Math.random()*tokens.length),
 	w2 = Math.floor(Math.random()*tokens.length),
-	temp = 0,
-	ctx = canvas.getContext('2d');
+	temp = 0;
+	
 	
 	ctx.font = 'bold 12px Times';
 	ctx.beginning = 20;

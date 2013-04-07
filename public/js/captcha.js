@@ -49,7 +49,10 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 			'margin': '0 auto',
 			'font-family': '"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif',
 			'text-transform':'none',
-			'letterSpacing': '0'
+			'letterSpacing': '0',
+			'position': 'relative',
+			'background': '#fff',
+			'box-shadow': '0px -1px 18px -2px #111'
 		}),
 		gBody = $("<gcap />",{id : "gCaptcha-body"}).appendTo(gCaptcha).css({
 			'border-top': '1px solid #cdcdcd'
@@ -63,7 +66,8 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 			'border-right': '1px solid #cdcdcd',
 			'min-height': '30px',
 			'background': 'rgb(245, 252, 245)',
-			'border-bottom': '1px solid #cdcdcd'
+			'border-bottom': '1px solid #cdcdcd',
+			'position': 'relative'
 		});
 
 		var qArea = $("<gcap />",{id : "gCaptcha-question_area"}).appendTo(gBody).css({
@@ -77,9 +81,8 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 			$("<img />",{id : "gCaptcha-question"}).attr('src',app.data).appendTo(qArea);
 			$("<input/>",{id : "gCaptcha-input"}).attr('type','text').appendTo(qArea).css({
 				'width': '263px',
-				'margin': '0 auto',
-				'position': 'relative',
-				'display': 'block',
+				'margin-left': '20px',
+				'display': 'inline-block',
 				'height': '26px',
 				'margin-bottom': '10px',
 				'border-radius': '2px'
@@ -255,7 +258,14 @@ break;case 34:t.datepicker._adjustDate(e.target,e.ctrlKey?+t.datepicker._get(o,"
 				if (data.result) {
 					console.log("True Captcha");
 
-					app.desc.html("Captcha was successfully solved!")
+					app.desc.html("Captcha was successfully solved!<br/>")
+					$("<img/>",{src:"images/check-mark.png", id : "gCaptcha-check"}).appendTo(app.desc).css({
+						"float": "right",
+						"height": "40px",
+						"right": "3px",
+						"top": "3px",
+						"position": "absolute"
+					});
 				} else {
 					console.log("False Captcha");
 					app.desc.html("Captcha was not solved. Try again!")
