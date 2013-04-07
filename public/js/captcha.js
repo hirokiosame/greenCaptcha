@@ -31,16 +31,19 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
 
 		var app = this;
-		var gCaptcha = $("<div />",{id : "gCaptcha"}).css({
+
+		var gCaptcha = $("<gcap />",{id : "gCaptcha"}).css({
 			'width': '300px',
 			'margin': '0 auto',
-			'font-family': '"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif'
+			'font-family': '"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif',
+			'text-transform':'none',
+			'letterSpacing': '0'
 		}),
-		gBody = $("<div />",{id : "gCaptcha-body"}).appendTo(gCaptcha).css({
+		gBody = $("<gcap />",{id : "gCaptcha-body"}).appendTo(gCaptcha).css({
 			'border-top': '1px solid #cdcdcd'
 		}),
 		gBottom;
-		$("<div />",{id : "gCaptcha-description", text: "Type last two word of the sentence to the input box and click submit!"}).appendTo(gBody).css({
+		$("<gcap />",{id : "gCaptcha-description", text: "Type last two word of the sentence to the input box and click submit!"}).appendTo(gBody).css({
 			'padding': '8px',
 			'font-size': '13px',
 			'border-left': '3px solid rgb(34, 156, 83)',
@@ -49,7 +52,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 			'background': 'rgb(245, 252, 245)',
 			'border-bottom': '1px solid #cdcdcd'
 		});
-		var qArea = $("<div />",{id : "gCaptcha-question_area"}).appendTo(gBody).css({
+		var qArea = $("<gcap />",{id : "gCaptcha-question_area"}).appendTo(gBody).css({
 			'min-height': '30px',
 			'border-left': '1px solid #cdcdcd',
 			'border-right': '1px solid #cdcdcd'
@@ -59,21 +62,21 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 			$("<input/>",{id : "gCaptcha-input"}).attr('type','text').appendTo(qArea);
 		}
 		
-		gBottom = $("<div />",{id : "gCaptcha-bottom"}).appendTo(gCaptcha).css({
+		gBottom = $("<gcap />",{id : "gCaptcha-bottom"}).appendTo(gCaptcha).css({
 			'border-bottom-right-radius': '4px',
 			'border-bottom-left-radius': '4px',
 			'height': '30px',
 			'padding': '10px',
 			'border': '1px solid #cdcdcd'
 		});
-		$("<img />",{id : "gCaptcha-logo", src : "greenCaptcha-logo.png"}).appendTo(gBottom).css({
+		$("<img />",{id : "gCaptcha-logo", src : "http://www.romanzubenko.com:3002/images/greenCaptcha-logo.png"}).appendTo(gBottom).css({
 			'font-weight': '600',
 			'width': '154px',
 			'margin-top': '-11px',
 			'display': 'block',
 			'float': 'left'
 		});
-		$("<div />",{id : "gCaptcha-submit", text : "Submit"}).appendTo(gBottom).css({
+		$("<gcap />",{id : "gCaptcha-submit", text : "Submit"}).appendTo(gBottom).css({
 			'height': '16px',
 			'padding': '5px 8px 5px 8px',
 			'border': '1px solid #cdcdcd',
@@ -86,9 +89,10 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 			'background-image': '-webkit-linear-gradient(top, rgb(255, 255, 255), rgb(238, 238, 238))'
 		});
 
-		document.styleSheets[0].insertRule('#gCaptcha-submit :hover {border-left: 3px solid rgb(30, 145, 26)}', 0);
+		//document.styleSheets[0].insertRule('#gCaptcha-submit :hover {border-left: 3px solid rgb(30, 145, 26)}', 0);
 		gCaptcha.appendTo(this.pointer);
 		console.log(this.pointer)
+		$("gcap").css("display","block").css("all","default;");
 	}
 
 
@@ -97,5 +101,5 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 })(window)
 
 $(document).ready(function() {
-	window.captcha = new GreenCaptcha("#captcha");
+	window.captcha = new GreenCaptcha("#sub_nav");
 })
