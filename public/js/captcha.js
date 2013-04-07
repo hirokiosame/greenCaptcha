@@ -111,13 +111,12 @@
 				'margin-bottom': '10px',
 				'border-radius': '2px',
 				'position': 'absolute',
-				'bottom': '0',
+				'bottom': '-5px',
 				'left': '0px',
 				'border': '1px solid rgb(134, 133, 133)'
 			});
 		} else {
 			//Drag and Drop!
-			
 
 			//Classes
 			$(qArea).css("height", "100");
