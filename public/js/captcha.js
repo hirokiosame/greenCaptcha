@@ -113,7 +113,11 @@
 				'display': 'inline-block',
 				'height': '26px',
 				'margin-bottom': '10px',
-				'border-radius': '2px'
+				'border-radius': '2px',
+				'position': 'absolute',
+				'bottom': '0',
+				'left': '0px',
+				'border': '1px solid rgb(134, 133, 133)'
 			});
 		} else {
 			//Drag and Drop!

@@ -83,12 +83,10 @@ app.get('/greencaptcha.js', function(req, res){
 
 				var input = { id: id, data: drawWords[0], type: 'fact' };
 				input = JSON.stringify(input);
-				if (!reload)
-					response += "window.input = ";
-
-				response += input;
-
+					
 				if (!reload) {
+					response += "window.input = ";
+					response += input + ";";
 					fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
 						if (err) console.log(err);
 						response += data;
@@ -96,6 +94,7 @@ app.get('/greencaptcha.js', function(req, res){
 						res.send(response);	
 					});
 				} else {
+					response += input;
 					res.setHeader('Content-Type', 'application/json');
 					res.jsonp(response);
 				}
@@ -116,12 +115,10 @@ app.get('/greencaptcha.js', function(req, res){
 
 					var input = { id: id, data: drawWords[0], type: 'fact' };
 					input = JSON.stringify(input);
-					if (!reload)
-						response += "window.input = ";
-
-					response += input;
-
 					if (!reload) {
+						response += "window.input = ";
+						response += input + ";";
+		
 						fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
 							if (err) console.log(err);
 							response += data;
@@ -129,6 +126,7 @@ app.get('/greencaptcha.js', function(req, res){
 							res.send(response);	
 						});	
 					} else {
+						response += input;
 						res.setHeader('Content-Type', 'application/json');
 						res.jsonp(response);
 					}
@@ -183,19 +181,17 @@ app.get('/greencaptcha.js', function(req, res){
 
 				var input = { id: id, data: trashHashes, bin: randomBin, type: 'dnd'};
 				input = JSON.stringify(input);
-				if (!reload)
-					response += "window.input = ";
-
-				response += input;
-
-
 				if (!reload) {
+					response += "window.input = ";
+					response += input + ";";
+	
 					fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
 						if (err) console.log(err);
 						response += data;
 						res.send(response);	
 					});
 				} else {
+					response += input;
 					res.setHeader('Content-Type', 'application/json');
 					res.jsonp(response);
 				}
@@ -293,7 +289,7 @@ draw.drawSentence = function (sentence,canvas,ctx) {
 	temp = 0;
 	
 	
-	ctx.font = 'bold 12px Times';
+	ctx.font = 'bold 16px Times';
 	ctx.beginning = 20;
 	ctx.fontSize = 12;
 	ctx.width = canvas.width;
@@ -330,7 +326,7 @@ draw.drawWord = function (word,x,y,distortC,ctx) {
 	var w = ctx.measureText(word);
 	if (w.width + x > ctx.width) {
 		x = ctx.beginning;
-		y += ctx.fontSize + 5;
+		y += ctx.fontSize + 10;
 	}
 
 	ctx.fillText(word, x, y);
@@ -339,23 +335,28 @@ draw.drawWord = function (word,x,y,distortC,ctx) {
 		this.distort(x,y,w.width,ctx);
 	}
 
-	x += w.width + 5;
+	x += w.width + 9;
 
 	return [x,y];
 }
 
 draw.distort = function(x,y,width,ctx) {
-	var path = [x + Math.floor(Math.random() * width),y + Math.floor(Math.random() * ctx.fontSize) - 10];
+	var path = [x + Math.floor(Math.random() * width),y + Math.floor(Math.random() * ctx.fontSize) - 11];
 	// Add random lines
 	for (var i = 0, lim =  Math.floor(Math.random() * 5 + 3); i < lim; i++) {
 		ctx.strokeStyle = this.rndC();
-		ctx.lineWidth = Math.floor(Math.random() * 2 + 1);
+		ctx.lineWidth = 3;
 		ctx.beginPath();
 		ctx.lineTo(path[0], path[1]);
-		path = [x + Math.floor(Math.random() * width),y + Math.floor(Math.random() * ctx.fontSize) - 10];
+		path = [x + Math.floor(Math.random() * width),y + Math.floor(Math.random() * ctx.fontSize) - 11];
 		ctx.lineTo(path[0], path[1]);
 		ctx.stroke();
 	};
+
+	var x,y;
+	for (var i = 0, lim =  Math.floor(Math.random() * 15 + 10); i < lim; i++) {
+		ctx.strokeStyle = this.rndC();
+	}
 
 }
 
@@ -373,7 +374,12 @@ draw.rndC = function () {
 	str = 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',0.7)'
 	return str;
 }
-draw.create = function(){
+draw.boW = function(){
+	var result = colors[Math.floor(Math.random() * 2)]
+
+	if (result == 0) {
+		str = 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',0.7)'
+	}
 
 }
 
