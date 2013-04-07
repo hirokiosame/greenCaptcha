@@ -53,6 +53,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/greencaptcha.js', function(req, res){
+	var reload = req.query["reload"];
 	res.header("Content-Type", "text/javascript");
 	var ip = req.header('x-forwarded-for') || req.ip;
 
@@ -80,18 +81,24 @@ app.get('/greencaptcha.js', function(req, res){
 				if (err) console.log(err);
 				var id = info.insertId;
 
-				response += "window.input = { ";
-				response += "	id : " + id + ",";
-				response += "	data :'" + drawWords[0] + "',";
-				response += "	type : 'fact'";
-				response += "}; ";
+				var input = { id: id, data: drawWords[0], type: 'fact' };
+				input = JSON.stringify(input);
+				if (!reload)
+					response += "window.input = ";
 
-				fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
-					if (err) console.log(err);
-					response += data;
-					// TODO: concatenate captcha.js to var response.
-					res.send(response);	
-				});
+				response += input;
+
+				if (!reload) {
+					fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
+						if (err) console.log(err);
+						response += data;
+						// TODO: concatenate captcha.js to var response.
+						res.send(response);	
+					});
+				} else {
+					res.setHeader('Content-Type', 'application/json');
+					res.jsonp(response);
+				}
 			});
 			break;
 		case 2: // greenhouse gases by state
@@ -107,18 +114,24 @@ app.get('/greencaptcha.js', function(req, res){
 					if (err) console.log(err);
 					var id = info.insertId;
 
-					response += "window.input = { ";
-					response += "	id : " + id + ",";
-					response += "	data :'" + drawWords[0] + "',";
-					response += "	type : 'fact'";
-					response += "}; ";
+					var input = { id: id, data: drawWords[0], type: 'fact' };
+					input = JSON.stringify(input);
+					if (!reload)
+						response += "window.input = ";
 
-					fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
-						if (err) console.log(err);
-						response += data;
-						// TODO: concatenate captcha.js to var response.
-						res.send(response);	
-					});
+					response += input;
+
+					if (!reload) {
+						fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
+							if (err) console.log(err);
+							response += data;
+							// TODO: concatenate captcha.js to var response.
+							res.send(response);	
+						});	
+					} else {
+						res.setHeader('Content-Type', 'application/json');
+						res.jsonp(response);
+					}
 				});
 			});
 			break;
@@ -168,18 +181,24 @@ app.get('/greencaptcha.js', function(req, res){
 				console.log(trashHashes);	
 				trashHashes = shuffle(trashHashes);
 
-				response += "window.input = { ";
-				response += "	id : " + id + ",";
-				response += "	data : " + JSON.stringify(trashHashes) + ",";
-				response += "	bin : '" + randomBin + "',";
-				response += "	type : 'dnd'";
-				response += "}; ";
+				var input = { id: id, data: trashHashes, bin: randomBin, type: 'dnd'};
+				input = JSON.stringify(input);
+				if (!reload)
+					response += "window.input = ";
 
-				fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
-					if (err) console.log(err);
-					response += data;
-					res.send(response);	
-				});
+				response += input;
+
+
+				if (!reload) {
+					fs.readFile(path.join(__dirname, 'public', 'js', 'captcha.js'), function(err, data) {
+						if (err) console.log(err);
+						response += data;
+						res.send(response);	
+					});
+				} else {
+					res.setHeader('Content-Type', 'application/json');
+					res.jsonp(response);
+				}
 
 				console.log(question);
 			});
@@ -342,3 +361,4 @@ draw.rndC = function () {
 draw.create = function(){
 
 }
+
