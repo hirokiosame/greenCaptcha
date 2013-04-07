@@ -9,6 +9,7 @@ Include in your html:
 
 How to initialize:
 Provide two arguments: target selector and callback upon result
+<code>
 window.captcha = new GreenCaptcha("#captcha",function(result){
     if (result) {
 			console.log("Green Capptcha works: pass");
@@ -17,3 +18,4 @@ window.captcha = new GreenCaptcha("#captcha",function(result){
 		}
 	}); 
 }
+</code>
