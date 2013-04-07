@@ -13,42 +13,123 @@ div.captcha{
 	height: 100px;
 	border: 1px solid #ccc;
 	background-image: url('public/images/drag/bg.png');
+	position: relative;
 }
 
-.item1, .item2, .item3, .item4 {
+.item{
 	width: 40px;
 	height: 40px;
-	float: left;
-	margin: 10px 10px 10px 0;
+	position: absolute;
+	top: 10px;
+	left: 10px;
 }
 
-.bin {
+.box{
+	display: block;
+	width: 76px;
+	height: 54px;
+	background-image: url('public/images/drag/item/box.png');
+}
+.burger{
+	display: block;
+	width: 65px;
+	height: 48px;
+	background-image: url('public/images/drag/item/burger.png');
+}
+.can{
+	display: block;
+	width: 34px;
+	height: 59px;
+	background-image: url('public/images/drag/item/can.png');
+}
+.chips{
+	display: block;
+	width: 52px;
+	height: 58px;
+	background-image: url('public/images/drag/item/chips.png');
+}
+.glassbottle{
+	display: block;
+	width: 23px;
+	height: 65px;
+	background-image: url('public/images/drag/item/glassbottle.png');
+}
+.lightbulb{
+	display: block;
 	width: 40px;
-	height: 40px;
-	float: left;
-	margin: 10px;
+	height: 36px;
+	background-image: url('public/images/drag/item/lightbulb.png');
+}
+.pizza{
+	display: block;
+	width: 74px;
+	height: 48px;
+	background-image: url('public/images/drag/item/pizza.png');
+}
+.plasticbottle{
+	display: block;
+	width: 26px;
+	height: 60px;
+	background-image: url('public/images/drag/item/plasticbottle.png');
+}
+
+
+
+.bin{
+	display: block;
+	width: 129px;
+	height: 93px;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.bin.Paper{
+	background-image: url('public/images/drag/item/binPaper.png');
+}
+.bin.BC{
+	background-image: url('public/images/drag/item/binBC.png');
+}
+.bin.Compost{
+	background-image: url('public/images/drag/item/binCompost.png');
+}
+.bin.Landfill{
+	background-image: url('public/images/drag/item/binLandfill.png');
 }
 </style>
 <script>
 $(function() {
-	$(".item1").draggable({
-		revert: "invalid"
-	});
-	$(".item2").draggable({
-		revert: "invalid"
-	});
-	$(".item3").draggable({
-		revert: "invalid"
-	});
-	$(".item4").draggable({
-		revert: "invalid"
+	var containment = $( ".selector" ).draggable( "option", "containment" );
+
+
+	$(".item").each(function(){
+		$(this).draggable({
+			containment: "div.captcha",
+			stack: ".bin",
+			stop: function(event, ui){
+				console.log("stop: "+$(ui.helper).attr("class"));
+				//$(ui.helper).draggable( "option", "revert", false );
+			}
+		});
 	});
 
+
 	$(".bin").droppable({
-		activeClass: "ui-state-hover",
-		hoverClass: "ui-state-active",
-		drop: function( event, ui ) {
-			$( this ).addClass( "ui-state-highlight" ).find( "p" ).html( "Dropped!" );
+		drop: function( event, ui ){
+			$(".item").each(function(e){
+				if( $(this).attr("class") != $(ui.draggable).attr("class") ){
+					console.log("Moving back "+$(this).attr("class"));
+
+					//Put Added Objects Back to Initial Position
+					$(this).draggable( "option", "revert", true );
+				}
+			});
+
+			//$(ui.draggable).draggable( "option", "revert", true );
+		},
+		out: function( event, ui){
+			console.log("out!");
+			console.log(ui);
+			//$(this).droppable('option', 'accept', '.box');
 		}
 	});
 
@@ -57,14 +138,11 @@ $(function() {
 </head>
 <body>
 <div class="captcha">
-	<div class="item1 ui-widget-content"></div>
-	<div class="item2 ui-widget-content"></div>
-	<div class="item3 ui-widget-content"></div>
-	<div class="item4 ui-widget-content"></div>
+	<div class="item box"></div>
+	<div class="item burger"></div>
+	<div class="item plasticbottle"></div>
 
-	<div class="bin ui-widget-header">
-		<p>Drop me here</p>
-	</div>
+	<div class="bin BC"></div>
  </div>
  
 </body>
