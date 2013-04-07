@@ -7,7 +7,7 @@ path = require('path'),
 mysql = require('mysql'),
 geoip = require('geoip-lite'),
 crypto = require('crypto'),
-Canvas = require('./node_modules/canvas');
+Canvas = require('canvas');
 
 var connection = mysql.createConnection({
 	host     : '198.74.61.157',
@@ -74,7 +74,7 @@ app.get('/greencaptcha.js', function(req, res){
 			var poundsOfCO2 = 423 * distance * 0.00220462; // 423g/mi * 0.00220462lb/g * n mi = lbs of CO2
 			question = "A " + distance + "-mile trip in the average car produces " + Math.round(poundsOfCO2) + "lbs of CO2";
 			console.log(question);
-			var drawWords = draw.drawSentence(question);
+			var drawWords = draw.preDraw(question);
 			var answerHash = crypto.createHash('md5').update(drawWords[1] + " " + drawWords[2]).digest('hex');
 			var save = "INSERT INTO challenges (answer) VALUES ('" + answerHash + "')";
 			connection.query(save, function(err, info) {
@@ -107,7 +107,7 @@ app.get('/greencaptcha.js', function(req, res){
 				if (err) console.log(err);
 				question = rows[0].state + " produced " + Math.round(rows[0].metricTons) + " metric tons of " + rows[0].gasName + " in " + rows[0].year;
 				console.log(question);
-				var drawWords = draw.drawSentence(question);
+				var drawWords = draw.preDraw(question);
 				var answerHash = crypto.createHash('md5').update(drawWords[1] + " " + drawWords[2]).digest('hex');
 				var save = "INSERT INTO challenges (answer) VALUES ('" + answerHash + "')";
 				connection.query(save, function(err, info) {
@@ -270,19 +270,21 @@ function shuffle(data) {
 
 var draw = {};
 draw.preDraw = function (sentence) {
-
-	var canvas = new Canvas(300,80),
-	app = 
-	base_image = new Image(),
+	var canvas = new Canvas(300,100),
+	app = this,
+	base_image = new Canvas.Image;
 	ctx = canvas.getContext('2d');
-  	base_image.src = 'images/base.png';
-  	base_image.onload = function(){
-   		context.drawImage(base_image, 100, 100);
 
-  	}
+	var data = fs.readFileSync(__dirname + '/public/images/forest.png');
+  	base_image.src = data;
+  
+   	ctx.drawImage(base_image,0,0);
+   	return draw.drawSentence(sentence,canvas,ctx);
+  	
 }
-draw.drawSentence = function (sentence) {
-	
+draw.drawSentence = function (sentence,canvas,ctx) {
+	console.log("tessssst");
+	console.log(sentence + " " + canvas + " " + ctx);
 
 	
 	tokens = sentence.split(' '),
