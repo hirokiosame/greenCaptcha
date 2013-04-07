@@ -5,16 +5,14 @@ Hackathon Project
 
 Include in your html:
 
-<code>
-
+```html
 <script src="http://www.romanzubenko.com:3002/greenCaptcha.js"></script>
-
-</code>
+```
 
 How to initialize:
 Provide two arguments: target selector and callback upon result
 
-<pre>
+```javascript
 window.captcha = new GreenCaptcha("#captcha",function(result){
     if (result) {
 			console.log("Green Capptcha works: pass");
@@ -23,5 +21,5 @@ window.captcha = new GreenCaptcha("#captcha",function(result){
 		}
 	}); 
 }
-</pre>
+```
 
