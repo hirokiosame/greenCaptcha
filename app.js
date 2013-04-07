@@ -256,6 +256,7 @@ draw.drawSentence = function (sentence) {
 	tokens = sentence.split(' '),
 	w1 = Math.floor(Math.random()*tokens.length),
 	w2 = Math.floor(Math.random()*tokens.length),
+	temp = 0,
 	ctx = canvas.getContext('2d');
 	
 	ctx.font = 'bold 12px Times';
@@ -266,6 +267,12 @@ draw.drawSentence = function (sentence) {
 
 	while (w2 === w1) {
 		w2 = Math.floor(Math.random()*tokens.length);
+	}
+
+	if (w2 < w1) {
+		temp = w2;
+		w2 = w1;
+		w1 = temp;
 	}
 
 	//go thru words
