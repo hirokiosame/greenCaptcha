@@ -1,12 +1,11 @@
 var express = require('express'),
 	routes = require('./routes'),
-	user = require('./routes/user'),
 	http = require('http'),
 	fs = require('fs'),
 	path = require('path'),
 	mysql = require('mysql'),
 	geoip = require('geoip-lite'),
-	Canvas = require('./node_modules/canvas');
+	Canvas = require('canvas');
 
 var connection = mysql.createConnection({
 	host     : '198.74.61.157',
@@ -21,7 +20,6 @@ connection.connect(function(err) {
 
 
 /*
-
 connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
   if (err) throw err;
 
@@ -29,7 +27,6 @@ connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
 });
 
 connection.end();
-
 */
 
 var app = express();
