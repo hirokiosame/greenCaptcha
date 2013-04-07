@@ -177,7 +177,7 @@ draw.drawSentence = function (sentence) {
 
 	ctx.rotate(0.2);
 
-	return canvas.toDataURL(); // returns base64 img png
+	return [canvas.toDataURL(),tokens[w1],tokens[w2]; // returns base64 img png
 }
 
 // input word, x,y; return final x,y,length
@@ -214,6 +214,6 @@ draw.distort = function(x,y,width,ctx) {
 }
 
 draw.rndC = function () {
-	return Math.floor(Math.random() * 100);
+	return Math.floor(Math.random() * 100) + 50;
 }
 
