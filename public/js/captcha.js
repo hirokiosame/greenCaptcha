@@ -248,17 +248,6 @@
 
 		$("<img/>",{src:"http://romanzubenko.com:3002/images/reload.png"}).appendTo(reload);
 
-		// Loading bar and messages
-		/*message = $("<gcap />",{id : "gCaptcha-message"}).appendTo(qArea);
-		$("<gcap />",{id : "gCaptcha-loading"}).appendTo(qArea).css({
-			'height': qArea.height() + "px",
-			'width': '100%',
-			'position': 'absolute',
-			'display': 'none',
-			'background-image': 'rgb(3,3,3,0.7)'
-		});*/
-
-		//document.styleSheets[0].insertRule('#gCaptcha-submit :hover {border-left: 3px solid rgb(30, 145, 26)}', 0);
 		gCaptcha.appendTo(this.pointer);
 		console.log(this.pointer)
 		$("gcap").css("display","block").css("all", "default;");
